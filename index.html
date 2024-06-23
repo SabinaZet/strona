@@ -1,5 +1,8 @@
+<head>
 <h1><font color='pink'>Hellou</font></h1>
-
+<link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+<script defer src="https://pyscript.net/latest/pyscript.js"></script>
+</head>
 <h2 style='font-size:50px; background-color: #ff7d7d;'><i>Tworzenie stron internetowych</i></h2>
 <hr>
 <center><img src='wiszące półki z doniczkami.jpg'></center><br>
@@ -22,4 +25,58 @@ Dodaj pliki:
     <input type="submit" value="Prześlij">
 </form>
 <hr>
+<button py-click="write_to_page()" id="manual">Say Hello</button><br><br><br>
+<div id="manual-write" style="text-align: center;"></div>
+<py-script>
+import random
+import sys
+
+def guessing_number():
+    imie = input('Hej! Miło, że jesteś :)\nPodaj swoje imię: ')
+    print(f'Witaj w Grze {imie}!\nZa chwilę zapytam Cię o podanie dwóch liczb: mniejszej i większej. Będą to granice zakresu, z którego wybiorę losową liczbę (pamiętaj, aby podawać TYLKO liczby całkowite).\nTwoim zadaniem jest odgadnąć liczbę, którą wybrałam w jak najmniejszej ilości prób.\nNie martw się, będę Ci troszkę podpowiadać ;) Jeżeli będziesz {"chciał" if imie[-1].lower() != "a" else "chciała"} przerwać grę w dowolnym momencie wpisz STOP.\nPOWODZENIA!!')
+    try:
+        lower = int(input('Podaj dolną granicę przedziału: '))
+        upper = int(input('Podaj górną granicę przedziału: '))
+        number = random.randint(lower, upper)
+        tried = 0
+    except:
+        print('Podaj liczbę całkowitą! Czy czcesz spróbować jeszcze raz?')
+        odp = input('Wpisz 1 jeżeli chcesz kontynuować lub 0 jeżeli chcesz przerwać grę.')
+        if odp == '1':
+            guessing_number()
+        else:
+            print('OK. Do zobaczenia :)')
+            sys.exit(0)
+    while True:
+        guess = input('Jak myślisz? Którą liczbę wybrałam?\nWpisz ją tutaj: ')
+        tried += 1
+        if guess.isnumeric():
+            guess = int(guess)
+        else:
+            if guess.upper() == 'STOP':
+                print('OK. Do zobaczenia :)')
+                sys.exit(0)
+            else:
+                try:
+                    guess = int(input('Podaj liczbę całkowitą: '))
+                except:
+                    print('Nie nadajesz się. Żegnam.')
+                    sys.exit(0)
+        if guess == number:
+            print(f'Gratuluję!! Udało Ci się zgadnąć w {tried} {"próbie" if tried==1 else "próbach"}! Moja liczba to {number}.')
+            again = input('Czy chcesz zagrać jeszcze raz? Wpisz TAK lub NIE: ')
+            if again.upper() == 'TAK':
+                guessing_number()
+            else:
+                print('Do zobaczenia :)')
+                sys.exit(0)
+        elif guess > number:
+            print('Ta liczba jest za duża. Spróbuj jeszcze raz :)')
+        elif guess < number:
+            print('Ta liczba jest za mała. Spróbuj jeszcze raz :)')
+        else:
+            print('Podaj liczbę całkowitą!')
+
+guessing_number()
+</py-script>
 Rest coming soon...
